@@ -1,0 +1,40 @@
+<!DOCTYPE HTML> 
+<html>
+    <head>
+        <title>Worse Than Dark Souls</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <center>
+            <h1>Worse Than Dark Souls</h1>
+            <canvas id="mycanvas" width="400px" height="500px"></canvas>
+            <div id="container">
+                <h3>Controls:</h3>
+                <p>Left and right arrow keys: Moves left and right.</p>
+                <p>Spacebar: Shoot</p>
+                <p>Press the restart button or press r on the keyboard to start over.</p>
+                <input type="button" value="restart" id="restart">
+                <p>Press the pause button or press p on the keyboard to pause the game.</p>
+                <input type="button" value="pause" id="pause">
+                <p>If you do click the restart button, click the game after you click restart before you press the spacebar so you don't keep restarting the game.</p>
+                <h3>Rules:</h3>
+                <p>If you get hit by one of the boxes, you lose the game.</p>
+                <p>If one of the boxes reaches the bottom, you lose the game.</p>
+                <h3>Difficulties:</h3>
+
+                <select id = "dropdown" class = "dropdown">
+                    <option value = "SuperEasy">SuperEasy</option>
+                    <option value = "Easy">Easy</option>
+                    <option value = "Medium">Medium</option>
+                    <option value = "Hard">Hard</option>
+                    <option value = "Impossible">Impossible</option>
+                </select>
+                <input type = "button" value = "change" id = "change">
+
+                <div id="scoredisplay"></div>
+            </div>
+        </center>
+        <script src="game.js"></script>
+            
+    </body>
+</html>

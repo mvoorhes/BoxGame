@@ -1,0 +1,33 @@
+body {
+    background-color:yellow;
+    color: black;
+    font-family: "Gill Sans";
+}
+#container {
+    vertical-align:top;
+    width:45%;
+    display:inline-block;
+}
+#mycanvas {
+    background-image: url("images/Background.gif");
+    border: 20px solid red;
+}
+li {
+    vertical-align:top;
+    text-align:left;
+    width:45%;
+    display:inline-block;
+}
+input[type="button"] {
+    width:75px;
+    height:25px;
+    font-size:15px;
+    color: black;
+    font-family:monospace;
+}
+.dropdown {
+    width:100px;
+    height:25px;
+    font-size:15px;
+    font-family:monospace;
+}
