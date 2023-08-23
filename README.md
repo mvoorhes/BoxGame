@@ -2,7 +2,11 @@
 
 This is a simple javascript game that is similar to galaga.
 
-Name of the game comes from the fact that before I added sprites, you played as a box shooting other boxes
+It is an endless shooter where you shoot down enemy sprites until you get hit or until one reaches the bottom.
+
+![example](images/GameExample.jpeg)
+
+Name of the game comes from the fact that before I added sprites, you played as a box shooting other boxes.
 
 ## Files/Folders
 
