@@ -14,7 +14,7 @@ var bullets = [];
 var enemies = [];
 
 // Booleans
-var gameover = false;
+var gameOver = false;
 var gamePaused = false;
 
 // Spawn rate and movement speed of enemies
@@ -25,15 +25,6 @@ var movementSpeed = 1;
 var score = 0;
 
 var requestId;
-
-// End of the screen
-var line = {
-    xPos: 0,
-    yPos: 500,
-    height: 20,
-    width: 400,
-};
-
 
 // Character and enemy models
 var character = new Image(20, 20);
@@ -64,7 +55,7 @@ var box = {
     goDown: false,
     shooting: false,
     die: false,
-    canshoot: true,
+    canShoot: true,
     
     move: function() {
         if (box.goLeft && box.xPos > 0) {
@@ -81,10 +72,10 @@ var box = {
         }
     },
     shoot: function() {
-        if (box.shooting && box.canshoot) {
+        if (box.shooting && box.canShoot) {
             bullets.push(new Bullet(box.xPos, box.yPos));
-            setTimeout(function(){box.canshoot = true;}, 300);
-            box.canshoot = false;
+            setTimeout(function(){box.canShoot = true;}, 300);
+            box.canShoot = false;
         }
     },
     draw: function() {
@@ -130,7 +121,7 @@ var box = {
 //        }
 //    }
 //    draw() {
-//        if (gameover === false) {
+//        if (gameOver === false) {
 //            ctx.drawImage(character, this.xPos, this.yPos);
 //        }
 //        ctx.stroke();
@@ -156,7 +147,7 @@ function Bullet(xPos, yPos) {
     this.move = function() {
         this.yPos -= 10;
         if (this.yPos < -5) {
-            this.toremove = true;
+            this.toRemove = true;
         }
         if (this.yPos < 0) {
             return false;
@@ -164,7 +155,7 @@ function Bullet(xPos, yPos) {
             return true;
         }
     };
-    this.toremove = false;
+    this.toRemove = false;
 }
 
 
@@ -174,7 +165,7 @@ function Bullet(xPos, yPos) {
 //         this.yPos = yPos;
 //         this.height = 10;
 //         this.width = 2;
-//         this.toremove = false;
+//         this.toRemove = false;
 //     }
 //     static draw() {
 //         ctx.drawImage(projectile, this.xPos, this.yPos);
@@ -183,7 +174,7 @@ function Bullet(xPos, yPos) {
 //     static move() {
 //         this.yPos -= 10;
 //         if (this.yPos < -5) {
-//             this.toremove = true;
+//             this.toRemove = true;
 //         }
 //     }
 // }
@@ -206,7 +197,7 @@ function Bullet(xPos, yPos) {
 //         this.xPos -= 0;
 //         this.yPos += movementSpeed;
 //         if (this.yPos > 500){
-//             this.toremove = true;
+//             this.toRemove = true;
 //         }
 //     };
 // }
@@ -217,7 +208,7 @@ class Enemy {
         this.yPos = yPos;
         this.height = 30;
         this.width = 30;
-        this.toremove = false;
+        this.toRemove = false;
     }
     draw() {
         ctx.drawImage(meteor, this.xPos, this.yPos);
@@ -226,8 +217,9 @@ class Enemy {
     move() {
         this.xPos -= 0;
         this.yPos += movementSpeed;
-        if (this.yPos > 500) {
-            this.toremove = true;
+        if (this.yPos > 480) {
+            this.toRemove = true;
+            gameOver = true;    // game ends if enemy reaches the bottom
         }
     }
 }
@@ -238,19 +230,19 @@ class Enemy {
 // What happens when a key is pressed
 // This needs to be updated since keyCodes are outdated (according to VSCode) but it works for now
 document.addEventListener("keydown", function(evt) {
-    if (evt.keyCode === 37 && gameover === false) {	// K_LEFT
+    if (evt.keyCode === 37 && gameOver === false) {	// K_LEFT
         box.goLeft = true;
     }
-    if (evt.keyCode === 38 && gameover === false) {	// K_UP
+    if (evt.keyCode === 38 && gameOver === false) {	// K_UP
         box.goUp = true;
     }
-    if (evt.keyCode === 39 && gameover === false) {	// K_RIGHT
+    if (evt.keyCode === 39 && gameOver === false) {	// K_RIGHT
         box.goRight = true;
     }
-    if (evt.keyCode === 40 && gameover === false) {	// K_DOWN
+    if (evt.keyCode === 40 && gameOver === false) {	// K_DOWN
         box.goDown = true;
     }
-    if (evt.keyCode === 32 && gameover === false) {	// K_SPACE
+    if (evt.keyCode === 32 && gameOver === false) {	// K_SPACE
         box.shooting = true;
     }
     if (evt.keyCode === 80){	// P (PAUSE)
@@ -343,12 +335,12 @@ function enemySpawn(){
 // Removes garbage bullets and enemies
 function garbagecollector() {
     for (var i = 0; i < bullets.length; i++) {
-        if (bullets[i].toremove === true) {
+        if (bullets[i].toRemove === true) {
             bullets.splice(i, 1);
         }
     }
     for (var i = 0; i < enemies.length; i++) {
-        if (enemies[i].toremove === true) {
+        if (enemies[i].toRemove === true) {
             enemies.splice(i, 1);
         }
     }
@@ -390,13 +382,13 @@ function clearScreen() {
 // This gets called whenever we re/start a game.
 function initialSettings() {
     score = 0;
-    gameover = false;
+    gameOver = false;
     enemies = [];
     bullets = [];
     box.xPos = 200;
     box.yPos = 400;
     box.shooting = false;
-    box.canshoot = true;
+    box.canShoot = true;
     box.goLeft = false;
     box.goRight = false;
     box.die = false;
@@ -413,7 +405,7 @@ function gameLoop() {
     box.shoot();
    
     requestId = window.requestAnimationFrame(gameLoop);
-    if (gameover === true) {
+    if (gameOver === true) {
         clearScreen();
         clearInterval(wave1);
     }
@@ -424,8 +416,8 @@ function gameLoop() {
         bullets[j].draw();
         for (var k = 0; k < enemies.length; k++) {
             if (isColliding(bullets[j], enemies[k])) {
-                enemies[k].toremove = true;
-                bullets[j].toremove = true;
+                enemies[k].toRemove = true;
+                bullets[j].toRemove = true;
                 score = score + 100;
             } 
         }   
@@ -436,9 +428,12 @@ function gameLoop() {
         enemies[i].move();
         enemies[i].draw();
         // Game over if statement
-        if (isColliding(box, enemies[i]) || isColliding(line, enemies[i])) {
-            gameover = true;
-            // alert("Press R to Restart.");
+        // if (isColliding(box, enemies[i]) || isColliding(line, enemies[i])) {
+        //     gameOver = true;
+        //     // alert("Press R to Restart.");
+        // }
+        if (isColliding(box, enemies[i])) {
+            gameOver = true;
         }
     }
     
@@ -468,8 +463,8 @@ gameLoop();
 //         bullets[j].draw();
 //         // for (var k = 0; k < enemies.length; k++) {
 //         //     if (isColliding(bullets[j], enemies[k])) {
-//         //         enemies[k].toremove = true;
-//         //         bullets[j].toremove = true;
+//         //         enemies[k].toRemove = true;
+//         //         bullets[j].toRemove = true;
 //         //         score = score + 100;
 //         //     } 
 //         // }   
