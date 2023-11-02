@@ -28,12 +28,13 @@ var requestId;
 
 // Character and enemy models
 const character = new Image(20, 20);
-character.src = "images/Character.png";
 const projectile = new Image(10, 10);
-projectile.src = "images/Bullet.png";
 const meteor = new Image(30, 30);
-meteor.src = "images/Enemy.png";
 const explosion = new Image();
+
+character.src = "images/Character.png";
+projectile.src = "images/Bullet.png";
+meteor.src = "images/Enemy.png";
 explosion.src = "images/Explode.png"
 
 var spritePosition = 0;
@@ -324,7 +325,7 @@ function initialSettings() {
     mainCharacter.initialize();
 }
 
-
+// Draws bullets & enemies, handles collisions
 function updateGame() {
     bullets.forEach(bullet => {
         bullet.move();
@@ -363,7 +364,6 @@ function gameLoop() {
         return;
     }
 
-    // Draws bullets & enemies, handles collisions
     updateGame();
     
     garbagecollector();
