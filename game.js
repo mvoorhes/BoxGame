@@ -30,7 +30,7 @@ var requestId;
 const character = new Image(20, 20);
 const projectile = new Image(10, 10);
 const meteor = new Image(30, 30);
-const explosion = new Image();
+const explosion = new Image(30, 30);
 
 character.src = "images/Character.png";
 projectile.src = "images/Bullet.png";
@@ -43,6 +43,12 @@ var spritePosition = 0;
 change.addEventListener("click", assignDifficulty);
 pauseGame.addEventListener("click", pause);
 restart.addEventListener("click", reStart);
+
+// Defining some context constants
+ctx.font = "30px monospace";
+ctx.fillStyle = "white";
+ctx.textAlign = "center";
+
 
 // Main player class
 
@@ -259,7 +265,7 @@ function garbagecollector() {
     }
     for (var i = 0; i < enemies.length; i++) {
         if (enemies[i].toRemove) {
-            animate(enemies[i].xPos, enemies[i].yPos);
+            // animate(enemies[i].xPos, enemies[i].yPos);
             enemies.splice(i, 1);
         }
     }
@@ -289,6 +295,8 @@ function animate(x, y) {
         let currentTime = Date.now();
         let elapsedTime = currentTime - lastFrame;
 
+        ctx.globalCompositeOperation = "destination-over";
+
         ctx.clearRect(x, y, 30, 30);
         ctx.drawImage(explosion, previousSpritePosition, 0, 30, 30, x, y, 30, 30);
 
@@ -298,6 +306,8 @@ function animate(x, y) {
             spritePosition += 30;
             lastFrame = currentTime;
         }
+
+        ctx.globalCompositeOperation = "source-over";
 
         let totalElapsed = currentTime - startTime;
 
@@ -314,6 +324,7 @@ function animate(x, y) {
 function clearScreen() {
     enemies = [];
     bullets = [];
+    ctx.clearRect(0, 0, mycanvas.width, mycanvas.height);
 }
 
 // This gets called whenever we re/start a game.
@@ -325,8 +336,13 @@ function initialSettings() {
     mainCharacter.initialize();
 }
 
-// Draws bullets & enemies, handles collisions
+// Draws player, bullets & enemies, handles collisions
 function updateGame() {
+
+    mainCharacter.move();
+    mainCharacter.draw();
+    mainCharacter.shoot();
+
     bullets.forEach(bullet => {
         bullet.move();
         bullet.draw();
@@ -334,6 +350,7 @@ function updateGame() {
             if (isColliding(enemy, bullet)) {
                 enemy.toRemove = true;
                 bullet.toRemove = true;
+                animate(enemy.xPos, enemy.yPos);
                 score += 100;
             }
         });
@@ -353,24 +370,27 @@ function updateGame() {
 function gameLoop() {
     ctx.beginPath();
     ctx.clearRect(0, 0, mycanvas.width, mycanvas.height);
-    mainCharacter.move();
-    mainCharacter.draw();
-    mainCharacter.shoot();
-   
-    requestId = window.requestAnimationFrame(gameLoop);
+    
     if (gameOver) {
         clearScreen();
         clearInterval(wave1);
+        ctx.fillText("Game Over", mycanvas.width / 2, mycanvas.height / 2);
         return;
     }
 
+    requestId = window.requestAnimationFrame(gameLoop);
+
     updateGame();
-    
+
     garbagecollector();
+
     scoredisplay.innerHTML = "score: " + score;
 }
 
+// export { initialSettings, enemySpawn, gameLoop, spawn }
 
+
+ctx.globalCompositeOperation = "source-over";
 initialSettings();
 var wave1 = setInterval(enemySpawn, spawn);
 gameLoop();
